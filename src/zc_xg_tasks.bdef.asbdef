@@ -1,0 +1,43 @@
+projection implementation in class zbp_c_xg_tasks unique;
+strict;
+use draft;
+
+define behavior for ZC_XG_TASKS alias Tasks
+use etag
+
+{
+  use create;
+  use update ( augment );
+  use delete;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  use association _SubTask { create; with draft; }
+}
+
+define behavior for ZC_SUB_TASKS alias SubTask
+use etag
+{
+
+  use update;
+  use delete;
+
+  use association _Task { with draft; }
+  use association _SubSubTask { create; with draft; }
+
+}
+define behavior for ZC_SUB_SUBTASKS alias SubSubTask
+use etag
+{
+
+  use update;
+  use delete;
+
+  use association _MainTask { with draft; }
+  use association _SubTask { with draft; }
+
+}

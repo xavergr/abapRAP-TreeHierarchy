@@ -1,0 +1,45 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'SubSubTask',
+    typeNamePlural: 'SubSubTasks',
+    title: { type: #STANDARD, value: 'TaskID' } }
+}
+annotate entity ZC_SUB_SUBTASKS with
+
+{
+  @UI.facet: [ { id:            'idSubSubtask',
+                 purpose:       #STANDARD,
+                 type:          #IDENTIFICATION_REFERENCE,
+                 label:         'Subsubtask',
+                 position:      10 } ]
+  @UI.hidden: true
+  TaskUUID;
+
+  @UI.lineItem: [ {
+    position: 10 ,
+    importance: #HIGH
+  } ]
+  @UI.identification: [ {
+    position: 10
+  } ]
+  TaskID;
+
+  @UI.lineItem: [ {
+    position: 20 ,
+    importance: #MEDIUM
+  } ]
+  @UI.identification: [ {
+    position: 20
+  } ]
+  TaskType;
+
+  @UI.hidden: true
+  MainTask;
+
+  @UI.hidden: true
+  SubTask;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

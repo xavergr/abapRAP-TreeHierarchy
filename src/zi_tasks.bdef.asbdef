@@ -1,0 +1,124 @@
+managed implementation in class zcl_xg_bp_tasks unique;
+strict;
+with draft;
+
+define behavior for ZI_TASKS alias Tasks
+persistent table zxg_tasks
+draft table zxg_tasks_d
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+with additional save
+
+{
+  field ( readonly, numbering : managed ) TaskUUID;
+
+  field ( mandatory ) TaskType;
+
+  field ( readonly ) LocalCreatedAt, LocalCreatedBy, LastChangedAt, LocalLastChangedAt, LocalLastChangedBy, DaddyTask, TaskID;
+
+  determination create_task_id on save { create; }
+
+
+  create;
+  update;
+  delete;
+
+  draft action Edit;
+  draft action Activate;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  association _SubTask { create; with draft; }
+
+  mapping for ZXG_TASKS corresponding
+  {
+    LocalLastChangedAt = local_last_changed_at;
+    LocalLastChangedBy = local_last_changed_by;
+    LocalCreatedBy = local_created_by;
+    LocalCreatedAt = local_created_at;
+    LastChangedAt = last_changed_at;
+    DaddyTask = daddy_task;
+    TaskID = task_id;
+    TaskType = task_type;
+    TaskUUID = task_uuid;
+  }
+}
+
+
+define behavior for ZI_SUB_TASKS alias SubTasks
+implementation in class zcl_xg_bp_subtasks unique
+//persistent table zxg_tasks
+//draft table zxg_tasks_d
+persistent table zxg_sub_tasks
+draft table zxg_sub_tasks_d
+etag master LocalLastChangedAt
+lock dependent by _Task
+authorization dependent by _Task
+{
+
+  association _Task { with draft; }
+  association _SubSubTask { create; with draft; }
+
+  update;
+  delete;
+
+  field ( readonly, numbering : managed ) TaskUUID;
+  field ( readonly ) DaddyTask, TaskID;
+
+  determination create_task_id on save { create; }
+
+
+  mapping for zxg_sub_tasks
+  {
+    TaskID = task_id;
+    TaskType = task_type;
+    LocalLastChangedAt = local_last_changed_at;
+    LocalLastChangedBy = local_last_changed_by;
+    LocalCreatedBy = local_created_by;
+    LocalCreatedAt = local_created_at;
+    LastChangedAt = last_changed_at;
+    DaddyTask = daddy_task;
+
+    TaskUUID = task_uuid;
+  }
+}
+
+define behavior for ZI_SUB_SUBTASKS alias SubSubTasks
+implementation in class zcl_xg_bp_subtasks unique
+//persistent table zxg_tasks
+//draft table zxg_tasks_d
+persistent table zxg_sub_subtasks
+draft table zxg_sub_subtsk_d
+etag master LocalLastChangedAt
+lock dependent by _MainTask
+authorization dependent by _MainTask
+{
+
+  association _SubTask { with draft; }
+  association _MainTask { with draft; }
+
+  update;
+  delete;
+
+  field ( readonly, numbering : managed ) TaskUUID;
+  field ( readonly ) MainTask, SubTask, TaskID;
+
+  determination create_task_id on save { create; }
+
+
+  mapping for zxg_sub_subtasks
+  {
+    TaskID = task_id;
+    TaskType = task_type;
+    LocalLastChangedAt = local_last_changed_at;
+    LocalLastChangedBy = local_last_changed_by;
+    LocalCreatedBy = local_created_by;
+    LocalCreatedAt = local_created_at;
+    LastChangedAt = last_changed_at;
+    SubTask = sub_task;
+    MainTask = main_task;
+    TaskUUID = task_uuid;
+  }
+}

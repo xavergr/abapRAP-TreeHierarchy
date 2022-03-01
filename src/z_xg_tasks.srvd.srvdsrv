@@ -1,0 +1,6 @@
+@EndUserText.label: 'Service definition forZC_XG_TASKS'
+define service Z_XG_TASKS {
+  expose ZC_XG_TASKS as Tasks;
+  expose ZC_SUB_TASKS as SubTask;
+  expose ZC_SUB_SUBTASKS as SubSubTask;
+}
